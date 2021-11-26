@@ -1,0 +1,108 @@
+﻿@*
+    * FILE : MainLayout.razr
+    * PROJECT : SENG3020 - Flight Data Management System
+    * PROGRAMMER : (Group 8) Benito Zefferino, Daniel Meyer, Jordan Green, Justin Croezen
+    * FIRST VERSION : 2021-11-12
+    * DESCRIPTION :
+    * This file defines the layout  and theme for each of the pages 
+    * it defines a light thene and dark theme 
+    * as well as the functionality for switching betwwen the light and dark themes
+    
+*@
+@using FDMS.Shared
+@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="currentTheme" />
+
+@code {
+    MudTheme currentTheme = new MudTheme();
+
+    MudTheme defaultTheme = new MudTheme()
+        {
+            Palette = new Palette()
+            {
+                Black = "#272c34",
+                Background = "#FCFCFC",
+                AppbarBackground = "#66B8E9",
+                Primary = "rgba(45, 45, 45, 1)",
+                Secondary = "rgba(120, 120, 137, 1)"
+            }
+        };
+
+    MudTheme darkTheme = new MudTheme()
+        {
+            Palette = new Palette()
+            {
+                Secondary = "rgba(80, 80, 97, 1)",
+                SecondaryDarken = "rgba(60, 60, 77, 1)",
+                Black = "#27272f",
+                Background = "#32333d",
+                BackgroundGrey = "#27272f",
+                Surface = "#373740",
+                DrawerBackground = "#27272f",
+                DrawerText = "rgba(255,255,255, 0.50)",
+                DrawerIcon = "rgba(255,255,255, 0.50)",
+                AppbarBackground = "#27272f",
+                AppbarText = "rgba(255,255,255, 0.70)",
+                TextPrimary = "rgba(255,255,255, 0.70)",
+                TextSecondary = "rgba(255,255,255, 0.50)",
+                ActionDefault = "#adadb1",
+                ActionDisabled = "rgba(255,255,255, 0.26)",
+                ActionDisabledBackground = "rgba(255,255,255, 0.12)",
+                Divider = "rgba(255,255,255, 0.12)",
+                DividerLight = "rgba(255,255,255, 0.06)",
+                TableLines = "rgba(255,255,255, 0.12)",
+                LinesDefault = "rgba(255,255,255, 0.12)",
+                LinesInputs = "rgba(255,255,255, 0.3)",
+                TextDisabled = "rgba(255,255,255, 0.2)"
+            }
+        };
+
+    protected override void OnInitialized()
+    {
+        currentTheme = darkTheme;
+    }
+
+    void ToggleTheme()
+    {
+        if (currentTheme == defaultTheme)
+        {
+            currentTheme = darkTheme;
+        }
+        else
+        {
+            currentTheme = defaultTheme;
+        }
+    }
+}
+
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<div>
+    <MudLayout>
+        <MudAppBar Elevation="3">
+            @*<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />*@
+            
+                <MudButton Color="Color.Primary" Link="/">Main</MudButton>
+                <MudButton Color="Color.Primary" Link="aircraftLookup">Aircraft</MudButton>
+                <MudButton Color="Color.Primary" Link="search">Search</MudButton>
+            
+            <MudSpacer />
+            @if (currentTheme == darkTheme)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Brightness5" Color="Color.Inherit" OnClick="ToggleTheme" />
+            }
+            else
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Class="" Color="Color.Inherit" OnClick="ToggleTheme" />
+            }
+        </MudAppBar>
+
+        <MudMainContent Class="pt-16 px-16">
+            <MudContainer Class="mt-6">
+                @Body
+            </MudContainer>
+        </MudMainContent>
+    </MudLayout>
+</div>

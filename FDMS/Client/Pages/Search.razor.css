@@ -1,0 +1,106 @@
+﻿.Main-wrapper {
+    width: 100%;
+    padding: 30px 10px;
+}
+
+.search-help-message {
+    margin-top: 150px;
+}
+
+.info-title-main{
+    text-align: center;
+}
+
+.flight-info-twoColumn {
+    width: 100%;
+}
+
+.flight-info-twoColumn-row {
+    width: 100%;
+    display: flex;
+}
+
+.flight-info-twoColumn-column {
+    width: 50%;
+    text-align: center;
+}
+
+::deep .flight-info-mudcard {
+    margin-top: 8px;
+    margin-bottom: 15px;
+}
+
+::deep .mud-item-date{
+}
+
+::deep .mud-item-time {
+    text-align: right;
+}
+
+::deep .mud-list-item {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+::deep .mud-grid-spacing-xs-3 > .mud-grid-item {
+    padding-right: 12px;
+}
+
+::deep .tail-number-muditem{
+    margin-top: 30px;
+}
+
+::deep .date-time-muditem{
+    margin-top: 20px;
+}
+
+::deep .button-muditem{
+    margin-top: 30px;
+    text-align: right;
+}
+
+
+::deep .tail-number-title-wrapper {
+    margin-left: -13px;
+}
+
+.tail-number-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+::deep .flight-info-block-wrapper {
+    text-align: center;
+}
+
+.flight-info-title{
+    font-weight: bold;
+}
+
+.flight-info-date {
+    font-size: 24px;
+    padding-top: 10px;
+}
+
+.flight-info-time{
+    font-size: 24px;
+}
+
+.flight-info-twoColumn{
+    width: 100%;
+}
+
+.flight-info-twoColumn-row{
+    width: 100%;
+    display: flex;
+}
+
+.flight-info-twoColumn-column{
+    width: 50%;
+    text-align: center;
+}
+
+::deep .mud-list-item-gutters{
+    padding-right: 0px;
+    padding-left: 0px;
+}

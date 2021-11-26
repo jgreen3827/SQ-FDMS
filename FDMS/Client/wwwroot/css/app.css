@@ -1,0 +1,50 @@
+﻿.mud-card-test {
+    background-color: black;
+    height: 500px;
+}
+
+::deep .tail-number-title-wrapper {
+    margin-left: 20px;
+}
+
+.tail-number-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+::deep .flight-info-block-wrapper {
+    text-align: center;
+}
+
+.flight-info-title {
+    font-weight: bold;
+}
+
+.flight-info-date {
+    font-size: 24px;
+    padding-top: 10px;
+}
+
+.flight-info-time {
+    font-size: 24px;
+}
+
+.flight-info-twoColumn {
+    width: 100%;
+}
+
+.flight-info-twoColumn-row {
+    width: 100%;
+    display: flex;
+}
+
+.flight-info-twoColumn-column {
+    width: 50%;
+    text-align: center;
+}
+
+
+::deep .mud-list-item-gutters {
+    padding-right: 0px;
+    padding-left: 0px;
+}

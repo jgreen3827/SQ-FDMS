@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31808.319
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FDMS.Server", "FDMS\Server\FDMS.Server.csproj", "{F237B5ED-2C20-4A4C-A678-E7792022D077}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FDMS.Client", "FDMS\Client\FDMS.Client.csproj", "{9B0B81F9-1978-4A0D-9F7D-4808A61BB10D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FDMS.Shared", "FDMS\Shared\FDMS.Shared.csproj", "{7637C6B5-A340-42B2-BDF7-1FC1571D0390}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85545DAD-B99E-44AC-A083-8B671B95BEC4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aircraft Transmission System", "Aircraft Transmission System", "{A7E254DA-F35D-4A5F-B61A-30717A715526}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FDMS_Aircraft_Transmission", "FDMS_Aircraft_Transmission\FDMS_Aircraft_Transmission.csproj", "{56E3BF4D-9794-4AEF-A038-153B469D38EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FDMS.UnitTest", "FDMS.UnitTest\FDMS.UnitTest.csproj", "{F71C7EC2-D785-456C-96D0-B62FCFCA7627}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F237B5ED-2C20-4A4C-A678-E7792022D077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F237B5ED-2C20-4A4C-A678-E7792022D077}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F237B5ED-2C20-4A4C-A678-E7792022D077}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F237B5ED-2C20-4A4C-A678-E7792022D077}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B0B81F9-1978-4A0D-9F7D-4808A61BB10D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B0B81F9-1978-4A0D-9F7D-4808A61BB10D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B0B81F9-1978-4A0D-9F7D-4808A61BB10D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B0B81F9-1978-4A0D-9F7D-4808A61BB10D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7637C6B5-A340-42B2-BDF7-1FC1571D0390}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7637C6B5-A340-42B2-BDF7-1FC1571D0390}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7637C6B5-A340-42B2-BDF7-1FC1571D0390}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7637C6B5-A340-42B2-BDF7-1FC1571D0390}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56E3BF4D-9794-4AEF-A038-153B469D38EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56E3BF4D-9794-4AEF-A038-153B469D38EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56E3BF4D-9794-4AEF-A038-153B469D38EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56E3BF4D-9794-4AEF-A038-153B469D38EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F71C7EC2-D785-456C-96D0-B62FCFCA7627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F71C7EC2-D785-456C-96D0-B62FCFCA7627}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F71C7EC2-D785-456C-96D0-B62FCFCA7627}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F71C7EC2-D785-456C-96D0-B62FCFCA7627}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{56E3BF4D-9794-4AEF-A038-153B469D38EF} = {A7E254DA-F35D-4A5F-B61A-30717A715526}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1763CAB0-B0A4-48FA-B5D4-F9D5FAAD24BD}
+	EndGlobalSection
+EndGlobal

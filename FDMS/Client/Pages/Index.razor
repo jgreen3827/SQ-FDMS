@@ -1,0 +1,264 @@
+﻿@*
+    * FILE : Index.razr
+    * PROJECT : SENG3020 - Flight Data Management System
+    * PROGRAMMER : (Group 8) Benito Zefferino, Daniel Meyer, Jordan Green, Justin Croezen
+    * FIRST VERSION : 2021-11-12
+    * DESCRIPTION :
+    * This file is the view page for the Index page of the program. This will diplay all of the live data coming
+    * in from the Aircraft Transmission System. This will allow the user to pause, resume, and clear this live data.
+*@
+
+@page "/"
+@using FDMS.Shared
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager NavigationManager
+@implements IAsyncDisposable
+
+<div class="Main-wrapper">
+    <MudGrid>
+        <MudItem xs="12">
+            <MudGrid>
+                <MudItem Class="main-title">
+                    <h1>Live Flights</h1>
+                    @if (_btnStateText == "Pause")
+                    {
+                        <span class="dot"></span>
+                    }
+                </MudItem>
+                <MudSpacer></MudSpacer>
+                <MudItem Class="main-pause-resume-button">
+                    <MudButton Style="padding-right:15px" Disabled="TelemetryList.Count == 0" Variant="Variant.Filled" Color="Color.Secondary" OnClick="ClearClick">
+                        <MudIcon Icon="@Icons.Material.Filled.Clear" />
+                        <MudText>Clear</MudText>
+                    </MudButton>
+                </MudItem>
+                <MudItem Class="main-pause-resume-button">
+                    <MudButton Disabled="!IsConnected" Variant="Variant.Filled" Color="Color.Primary" OnClick="ButtonClick">
+                        @if (_btnStateText == "Pause")
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Pause" />
+                            <MudText>Pause</MudText>
+                        }
+                        else
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.PlayArrow" />
+                            <MudText>Resume</MudText>
+                        }
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+
+        @if (TelemetryList.Count == 0)
+        {
+            <MudItem xs="12" Style="text-align: center; margin-top: 100px;">
+
+                <h2 class="search-help-message">Waiting for aircraft connection...</h2>
+
+            </MudItem>
+        }
+        <MudItem xs="12" Style="max-height: calc(100vh - 226px); overflow: auto;">
+            <MudList>
+                @foreach (Telemetry telemetry in TelemetryList)
+                {
+                    <MudListItem Style="width: 100%">
+                        <MudCard>
+                            <MudCardContent>
+                                <MudGrid>
+                                    <MudItem Class="tail-number-title-wrapper" xs="12">
+                                        <h3>Aircraft Tail Number: <span class="tail-number-title">@telemetry.AircraftTailNumber</span></h3>
+                                    </MudItem>
+                                    <MudItem Class="flight-info-block-wrapper" xs="4">
+                                        <p class="flight-info-title">DATE</p>
+                                        <p class="flight-info-date">@telemetry.TimeStamp.ToString("yyyy-MM-dd")</p>
+                                        <p class="flight-info-time">@telemetry.TimeStamp.ToString("hh:mm:ss")</p>
+                                    </MudItem>
+                                    <MudItem Class="flight-info-block-wrapper" xs="4">
+                                        <p class="flight-info-title">G-FORCE</p>
+                                        <div class="flight-info-twoColumn">
+                                            <div class="flight-info-twoColumn-row">
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>Accel-X</p>
+                                                </div>
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>@telemetry.GForceData.AccelX</p>
+                                                </div>
+                                            </div>
+                                            <div class="flight-info-twoColumn-row">
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>Accel-Y</p>
+                                                </div>
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>@telemetry.GForceData.AccelY</p>
+                                                </div>
+                                            </div>
+                                            <div class="flight-info-twoColumn-row">
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>Accel-Z</p>
+                                                </div>
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>@telemetry.GForceData.AccelZ</p>
+                                                </div>
+                                            </div>
+                                            <div class="flight-info-twoColumn-row">
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>Weight</p>
+                                                </div>
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>@telemetry.GForceData.Weight</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </MudItem>
+                                    <MudItem Class="flight-info-block-wrapper" xs="4">
+                                        <p class="flight-info-title">ATTITUDE</p>
+                                        <div class="flight-info-twoColumn">
+                                            <div class="flight-info-twoColumn-row">
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>Altitude</p>
+                                                </div>
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>@telemetry.AttitudeData.Altitude</p>
+                                                </div>
+                                            </div>
+                                            <div class="flight-info-twoColumn-row">
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>Pitch</p>
+                                                </div>
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>@telemetry.AttitudeData.Pitch</p>
+                                                </div>
+                                            </div>
+                                            <div class="flight-info-twoColumn-row">
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>Bank</p>
+                                                </div>
+                                                <div class="flight-info-twoColumn-column">
+                                                    <p>@telemetry.AttitudeData.Bank</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudListItem>
+                }
+            </MudList>
+        </MudItem>
+    </MudGrid>
+
+</div>
+
+@code {
+    private HubConnection? hubConnection;
+    public List<Telemetry> TelemetryList = new List<Telemetry>();
+    private List<Telemetry> TelemetryBuffer = new List<Telemetry>();
+    private bool Paused = false;
+    private string _btnStateIcon = "@Icons.Material.Filled.Pause";
+    private string _btnStateText = "Pause";
+
+    /*
+    * FUNCTION : ButtonClick
+    * DESCRIPTION :
+    *   This function is used for when the pause/resume button is clicked. It will change
+    *   the button icon and text. It will also clear and update the telemetry data.
+    *   On resuming, it will merge in the data that has been collected up until resuming.
+    * PARAMETERS :
+    *   none
+    * RETURNS :
+    *   void : none
+    */
+    void ButtonClick()
+    {
+        if (_btnStateText == "Pause")
+        {
+            Paused = true;
+            _btnStateText = "Resume";
+            _btnStateIcon = "@Icons.Material.Filled.Play";
+        }
+        else
+        {
+            Paused = false;
+            TelemetryList.InsertRange(0, TelemetryBuffer);
+            TelemetryBuffer.Clear();
+
+            _btnStateText = "Pause";
+            _btnStateIcon = "@Icons.Material.Filled.Pause";
+        }
+    }
+
+    /*
+    * FUNCTION : ClearClick
+    * DESCRIPTION :
+    *   This function is used for when the clear button is clicked. It will clear
+    *   the telemetry data.
+    * PARAMETERS :
+    *   none
+    * RETURNS :
+    *   void : none
+    */
+    void ClearClick()
+    {
+        TelemetryList.Clear();
+        TelemetryBuffer.Clear();
+    }
+
+    /*
+    * FUNCTION : OnInitializedAsync
+    * DESCRIPTION :
+    *   This function will initialize a HUB which allows data to be passed from server to client.
+    * PARAMETERS :
+    *   none
+    * RETURNS :
+    *   Task : none
+    */
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
+            .Build();
+
+        hubConnection.On<Telemetry>("ReceiveTelemetry",
+        (telemetry) =>
+        {
+            if (Paused == true)
+            {
+                TelemetryBuffer.Insert(0, telemetry);
+            }
+            else
+            {
+                TelemetryList.Insert(0, telemetry);
+            }
+
+            // Keep the list's length to 100 on screen.
+            if (TelemetryList.Count > 100)
+            {
+                TelemetryList.RemoveAt(TelemetryList.Count - 1);
+            }
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    public bool IsConnected => hubConnection?.State == HubConnectionState.Connected;
+
+    /*
+    * FUNCTION : DisposeAsync
+    * DESCRIPTION :
+    *   This function will dispose of the Hub.
+    * PARAMETERS :
+    *   none
+    * RETURNS :
+    *   ValueTask : none
+    */
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+
+}

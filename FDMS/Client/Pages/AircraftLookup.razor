@@ -1,0 +1,45 @@
+﻿@*
+    * FILE : AircraftLookup.razr
+    * PROJECT : SENG3020 - Flight Data Management System
+    * PROGRAMMER : (Group 8) Benito Zefferino, Daniel Meyer, Jordan Green, Justin Croezen
+    * FIRST VERSION : 2021-11-12
+    * DESCRIPTION :
+    * This file is the view page for the Aircraft Lookup. This will display all of the aircraft and allow
+    * the user to see the latest telemetry info.
+*@
+
+@page "/aircraftLookup"
+@inject HttpClient Http
+@using FDMS.Shared
+
+@{
+    List<Telemetry> TelemetryList = new List<Telemetry>()
+            {
+
+            };
+
+    TelemetryList.Add(new Telemetry() { AircraftTailNumber = "TailNumber11", GForceData = new GForce() { GForceId = 1, AccelX = (float)-0.03493434, AccelY = (float)0.0343242, AccelZ = (float)0.0342424, Weight = (float)4242.4764224 }, AttitudeData = new Attitude() { AttitudeId = 1, Altitude = (float)1175.942922, Pitch = (float)0.344334, Bank = (float)0.02247343 }, TimeStamp = new DateTime(2013, 6, 1, 12, 32, 30) });
+    TelemetryList.Add(new Telemetry() { AircraftTailNumber = "TailNumber21", GForceData = new GForce(), AttitudeData = new Attitude(), TimeStamp = new DateTime(2016, 6, 1, 12, 32, 30) });
+}
+
+<PageTitle>Aircraft List</PageTitle>
+<h1>Aircraft List </h1>
+@foreach (Telemetry telemetry in TelemetryList)
+{
+    string AircraftTelemetry = telemetry.AircraftTailNumber + " AttitudeID: " + telemetry.AttitudeData.AttitudeId + " Altitude: " + telemetry.AttitudeData.Altitude + " Pitch: " + telemetry.AttitudeData.Pitch + " Bank: " + telemetry.AttitudeData.Bank + " X Accel: " + telemetry.GForceData.AccelX + " Y Accel: " + telemetry.GForceData.AccelY + " ZAccel: " + telemetry.GForceData.AccelZ + " Timestamp: " + telemetry.TimeStamp;
+
+    <MudItem>
+        <MudButton OnClick="() => showTelemetryHistory(AircraftTelemetry)">
+            @telemetry.AircraftTailNumber
+        </MudButton>
+    </MudItem>
+}
+
+<p role="status">Telemetry: @telString</p>
+@code {
+    private string telString = String.Empty;
+    private void showTelemetryHistory(string aircraftTel)
+    {
+        telString = aircraftTel;
+    }
+}

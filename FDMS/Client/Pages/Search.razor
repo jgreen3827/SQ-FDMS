@@ -1,0 +1,314 @@
+﻿@*
+    * FILE : Search.razr
+    * PROJECT : SENG3020 - Flight Data Management System
+    * PROGRAMMER : (Group 8) Benito Zefferino, Daniel Meyer, Jordan Green, Justin Croezen
+    * FIRST VERSION : 2021-11-12
+    * DESCRIPTION :
+    * This file is the view page for the search functionality of the project. This will allow the user
+    * to be able to search the telemetry records for an airacraft and a date range for that aircraft.
+*@
+
+@page "/search"
+@inject IJSRuntime jsRuntime
+@inject HttpClient Http
+@using System.Net.Http.Json
+@using FDMS.Shared
+@using FDMS.Shared.ControllerModels
+@using System.Text
+
+<div class="Main-wrapper">
+    <MudGrid>
+        <MudItem xs="12">
+            <h1>Aircraft Telemtry History</h1>
+        </MudItem>
+
+        <MudItem Class="date-time-muditem selector-row" xs="12">
+            <MudGrid Style="align-items:baseline">
+                <MudItem xs="3">
+
+                    <MudSelect @bind-Value="tailNumberValue" Label="Aircraft">
+                        <MudSelectItem Value="@("")" />
+
+                        @foreach (string tailNumber in TailNumberList)
+                        {
+                            <MudSelectItem Value="@(tailNumber)" />
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="5">
+                    <MudDateRangePicker @ref="_picker" Label="Time Range" @bind-DateRange="_dateRange">
+                        <PickerActions>
+                            <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
+                            <MudButton OnClick="@(() => _picker.Close(false))">Cancel</MudButton>
+                            <MudButton Color="Color.Primary" OnClick="@(() => _picker.Close())">Ok</MudButton>
+                        </PickerActions>
+                    </MudDateRangePicker>
+                </MudItem>
+                <MudSpacer></MudSpacer>
+                @if (FilteredTelemetryList.Count > 0)
+                {
+                    <MudItem Class="button-muditem" Style="padding-right:15px">
+                        <MudButton OnClick="Export" Variant="Variant.Filled" Color="Color.Secondary">
+                            <MudText>Export</MudText>
+                        </MudButton>
+                    </MudItem>
+                }
+                <MudItem Class="button-muditem">
+                    <MudButton OnClick="SearchFlight" Disabled="String.IsNullOrEmpty(tailNumberValue) || Loading" Variant="Variant.Filled" Color="Color.Primary">
+                        <MudText>Search</MudText>
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="12" Style="text-align: center;">
+            @if (!Loading && FilteredTelemetryList.Count == 0)
+            {
+                <h2 class="search-help-message">To complete your search, select a tail number and a date range and click "Search".</h2>
+            }
+            else if (!Loading && FilteredTelemetryList.Count == 0 && NoData)
+            {
+                <h2 class="search-help-message">No results. Select a new date and try again.</h2>
+            }
+        </MudItem>
+
+        @if (!Loading && FilteredTelemetryList.Count > 0)
+        {
+            <MudItem Class="tail-number-title-wrapper" xs="12">
+                <span class="tail-number-title">@FilteredTelemetryList[0].AircraftTailNumber</span>
+            </MudItem>
+        }
+        <MudItem xs="12" Style="max-height: calc(100vh - 226px); overflow: auto;">
+            @if (Loading)
+            {
+                <MudItem xs="12" Style="text-align: center; margin-top: calc(25vh - 28px);">
+                    <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+                </MudItem>
+            }
+            else if (!Loading && FilteredTelemetryList.Count > 0)
+            {
+                <MudList>
+                    @foreach (Telemetry telemetry in FilteredTelemetryList)
+                    {
+                        <MudListItem Style="width: 100%">
+                            <MudCard>
+                                <MudCardContent>
+                                    <MudGrid>
+                                        <MudItem Class="flight-info-block-wrapper" xs="4">
+                                            <p class="flight-info-title">DATE</p>
+                                            <p class="flight-info-date">@telemetry.TimeStamp.ToString("yyyy-MM-dd")</p>
+                                            <p class="flight-info-time">@telemetry.TimeStamp.ToString("hh:mm:ss")</p>
+                                        </MudItem>
+                                        <MudItem Class="flight-info-block-wrapper" xs="4">
+                                            <p class="flight-info-title">G-FORCE</p>
+                                            <div class="flight-info-twoColumn">
+                                                <div class="flight-info-twoColumn-row">
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>Accel-X</p>
+                                                    </div>
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>@telemetry.GForceData.AccelX</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flight-info-twoColumn-row">
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>Accel-Y</p>
+                                                    </div>
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>@telemetry.GForceData.AccelY</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flight-info-twoColumn-row">
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>Accel-Z</p>
+                                                    </div>
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>@telemetry.GForceData.AccelZ</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flight-info-twoColumn-row">
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>Weight</p>
+                                                    </div>
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>@telemetry.GForceData.Weight</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </MudItem>
+                                        <MudItem Class="flight-info-block-wrapper" xs="4">
+                                            <p class="flight-info-title">ATTITUDE</p>
+                                            <div class="flight-info-twoColumn">
+                                                <div class="flight-info-twoColumn-row">
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>Altitude</p>
+                                                    </div>
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>@telemetry.AttitudeData.Altitude</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flight-info-twoColumn-row">
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>Pitch</p>
+                                                    </div>
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>@telemetry.AttitudeData.Pitch</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flight-info-twoColumn-row">
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>Bank</p>
+                                                    </div>
+                                                    <div class="flight-info-twoColumn-column">
+                                                        <p>@telemetry.AttitudeData.Bank</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudListItem>
+                    }
+                </MudList>
+            }
+        </MudItem>
+    </MudGrid>
+</div>
+
+
+@code {
+    [Inject] private IDialogService DialogService { get; set; }
+    MudDateRangePicker _picker;
+
+    List<string> TailNumberList = new List<string>();
+    List<Telemetry> FilteredTelemetryList = new List<Telemetry>();
+
+    bool Loading = false;
+    bool NoData = false;
+
+    public string tailNumberValue { get; set; } = "";
+
+    DateRange _dateRange = new DateRange(new DateTime(2018, 01, 01, 3, 5, 5, DateTimeKind.Utc), new DateTime(2019, 01, 01, 3, 5, 5, DateTimeKind.Utc));
+
+    // Uses the values selected to get telemetry data for selected aircraft filtered by the selected dates
+    async Task SearchFlight()
+    {
+        // Show loading spinner
+        Loading = true;
+        StateHasChanged();
+
+        // Check if values are valid
+        if (!String.IsNullOrEmpty(tailNumberValue) && _dateRange.Start.HasValue && _dateRange.End.HasValue)
+        {
+            try
+            {
+                FilteredTelemetryList.Clear();
+
+                FilteredAircraftRequest filteredAircraftRequest = new FilteredAircraftRequest()
+                    {
+                        AircraftTailNumber = tailNumberValue,
+                        StartDate = _dateRange.Start.Value,
+                        EndDate = _dateRange.End.Value
+                    };
+
+                var response = await Http.PostAsJsonAsync("Telemetry/GetFiltered", filteredAircraftRequest);
+                if (response.IsSuccessStatusCode)
+                {
+                    FilteredTelemetryList = await response.Content.ReadFromJsonAsync<List<Telemetry>>();
+
+                    if (FilteredTelemetryList != null && FilteredTelemetryList.Count > 0)
+                    {
+
+                        StateHasChanged();
+                    }
+                    else
+                    {
+                        ShowMessage("No Results Found", "Check your search parameters and try again.");
+                    }
+                }
+                else
+                {
+                    // Show error on UI
+                    ShowMessage("Error Receiving Data", "Try again.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                await GetTailNumbers();
+                Loading = false;
+                StateHasChanged();
+
+            }
+        }
+        else
+        {
+            ShowMessage("Incorrect Input", "Check your search parameters and try again.");
+        }
+    }
+
+    // Takes all filtered telemetry (shown on screen) and sends as a formatted ASCII text file that
+    // the user can save to their machine. Can only be triggered if there is data, otherwise the button is disabled.
+    async Task Export()
+    {
+        if (FilteredTelemetryList.Count > 0)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (Telemetry telemetry in FilteredTelemetryList)
+            {
+                sb.Append(
+                telemetry.AircraftTailNumber.Replace(",", "") + " - " + telemetry.TimeStamp + "\n" +
+                "GForce:  Accel-X - " + telemetry.GForceData.AccelX + " Accel-Y - " + telemetry.GForceData.AccelY + " Accel-Z - " + telemetry.GForceData.AccelZ + "Weight - " + telemetry.GForceData.Weight + "\n"
+                + "Attitude:  Altitude - " + telemetry.AttitudeData.Altitude + " Pitch - " + telemetry.AttitudeData.Pitch + " Bank - " + telemetry.AttitudeData.Bank + "\n\n"
+                + "-----------------------------------------------------------------------------\n\n"
+                );
+            }
+            // Displays a SaveFileDialog so the user can save the Image
+
+            await jsRuntime.InvokeAsync<object>("downloadTelemetryData", "TelemetryData - " + tailNumberValue, sb.ToString());
+            ShowMessage("Complete", "Export complete!");
+        }
+        else
+        {
+            // Only way this can happen haha
+            ShowMessage("Stop", "Stop using browser debugger to enable disabled buttons");
+        }
+    }
+
+    // When page is initialized this will load the list of existing tail numbers into the dropdown
+    protected override async Task OnInitializedAsync()
+    {
+        GetTailNumbers();
+    }
+
+    private async Task GetTailNumbers()
+    {
+        try
+        {
+            TailNumberList.Clear();
+            TailNumberList = await Http.GetFromJsonAsync<List<string>>("Telemetry/GetTailNumbers");
+            if (tailNumberValue == "")
+            {
+                tailNumberValue = TailNumberList.First();
+            }
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Error", ex.ToString());
+        }
+    }
+
+    // Displays a message box on screen with passed in strings
+    private async void ShowMessage(string errorName, string message)
+    {
+        await DialogService.ShowMessageBox(errorName, message);
+    }
+
+}
+

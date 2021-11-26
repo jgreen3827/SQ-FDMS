@@ -1,0 +1,89 @@
+﻿.Main-wrapper{
+    width: 100%;
+    padding: 30px 10px;
+}
+
+::deep .main-title{
+    display: inline-flex;
+}
+
+.dot {
+    height: 25px;
+    width: 25px;
+    margin-top: 7px;
+    margin-left: 10px;
+    border-radius: 50%;
+    background-color: red;
+    display: inline-block;
+
+    -webkit-animation: pulse 1s infinite;
+    -moz-animation: pulse 1s infinite;
+    -o-animation: pulse 1s infinite;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { 
+        opacity: 1
+    }
+
+    50% {
+        opacity: .25;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+/*::deep .main-pause-resume-button {
+    display: flex;
+    justify-content: flex-end;
+}*/
+
+::deep .tail-number-title-wrapper {
+    margin-left: 20px;
+}
+
+.tail-number-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+::deep .flight-info-block-wrapper {
+    text-align: center;
+}
+
+.flight-info-title{
+    font-weight: bold;
+}
+
+.flight-info-date {
+    font-size: 24px;
+    padding-top: 10px;
+}
+
+.flight-info-time{
+    font-size: 24px;
+}
+
+.flight-info-twoColumn{
+    width: 100%;
+}
+
+.flight-info-twoColumn-row{
+    width: 100%;
+    display: flex;
+}
+
+.flight-info-twoColumn-column{
+    width: 50%;
+    text-align: center;
+}
+
+
+::deep .mud-list-item-gutters{
+    padding-right: 0px;
+    padding-left: 0px;
+}
